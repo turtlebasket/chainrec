@@ -11,17 +11,17 @@ describe("chainrec_store", () => {
     const other = getAccountByName("account_1");
     let item = {
         entry_info: "Tale of the Bees",
-        entry: "alsdkjflaksdjflk",
+        entry: "fe2445b0ebf4e8492f6778682fa8a28ad6f8357b1f0a743245ec13a80cf9918c",
         user_info: "J.R.R. Tolkien Jr.",
     }
     let item2 = {
         entry_info: "Tale of the Bees: Reloaded",
-        entry: "alsdkjflaksdsldf",
+        entry: "fe2445b0ebf4e8492f6778682fa8a28ad6f8357b1f0a743245ec13a80cf9918c",
         user_info: "J.R.R. Tolkien Jr.",
     }
     let item3 = {
         entry_info: "Tale of the Fleas",
-        entry: "sldiucglxdfjdsfj",
+        entry: "fe2445b0ebf4e8492f6778682fa8a28ad6f8357b1f0a743245ec13a80cf9918c",
         user_info: "J.R.R. Tolkien III",
     }
 
