@@ -1,0 +1,17 @@
+<svg width="450" height="450" xmlns="http://www.w3.org/2000/svg">
+ <title>ChainRec</title>
+
+ <g>
+  <title>Layer 1</title>
+  <rect rx="20" id="svg_9" height="450" width="450" y="0" x="0" stroke-width="0" stroke="#000" fill="#fff"/>
+  <rect stroke="#000" rx="40" stroke-width="12" id="svg_1" height="320" width="320" y="65" x="65" fill="#fff"/>
+  <text transform="matrix(4.23957 0 0 4.23957 -479.73 -578.792)" font-weight="bold" stroke="#000" xml:space="preserve" text-anchor="start" font-family="monospace" font-size="24" stroke-width="0" id="svg_2" y="184.01598" x="144.92963" fill="#000000">0</text>
+  <text transform="matrix(4.23957 0 0 4.23957 -479.73 -578.792)" font-weight="bold" stroke="#000" xml:space="preserve" text-anchor="start" font-family="monospace" font-size="24" stroke-width="0" id="svg_3" y="211.69535" x="145.1655" fill="#000000">1</text>
+  <ellipse ry="24" rx="24" id="svg_4" cy="225" cx="65" stroke-width="12" stroke="#000" fill="#fff"/>
+  <ellipse ry="24" rx="24" id="svg_6" cy="225" cx="385.189" stroke-width="12" stroke="#000" fill="#fff"/>
+  <line stroke-width="12" id="svg_7" y2="225" x2="37" y1="225" x1="0" stroke="#000" fill="none"/>
+  <line stroke-width="12" id="svg_8" y2="225" x2="450" y1="225" x1="413" stroke="#000" fill="none"/>
+  <text transform="matrix(4.23957 0 0 4.23957 -479.73 -578.792)" font-weight="bold" stroke="#000" xml:space="preserve" text-anchor="start" font-family="monospace" font-size="24" stroke-width="0" id="svg_11" y="183.974" x="172.88685" fill="#000000">1</text>
+  <text transform="matrix(4.23957 0 0 4.23957 -479.73 -578.792)" font-weight="bold" stroke="#000" xml:space="preserve" text-anchor="start" font-family="monospace" font-size="24" stroke-width="0" id="svg_12" y="211.60617" x="172.75569" fill="#000000">0</text>
+ </g>
+</svg>
