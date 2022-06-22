@@ -1,7 +1,7 @@
 <script lang="ts">
     import hashFileData from "$lib/hash";
-    import type { EntryAnon } from "$lib/types";
-    export let item: EntryAnon;
+    import type { EntryAnon, Entry } from "$lib/types";
+    export let item: Entry;
     export let xClickFunc = () => {}
     let fileInput;
     let fileSelected;
@@ -27,8 +27,14 @@
         </div>
     </div>
     <div class="flex font-semibold text-2xl mt-4 overflow-hidden">{item.entryInfo}</div>
+    {#if item.userInfo}
+    <div class="flex text-lg mt-1 whitespace-normal">User info: {item.userInfo}</div>
+    {/if}
+    <div class="my-3"><hr></div>
+
     <div class="flex text-md text-zinc-600 mt-1 overflow-hidden">Created on {new Date(item.timestamp * 1000).toLocaleDateString()}</div>
     <div class="flex text-md text-zinc-600 mt-1 overflow-hidden">Created by {item.ownerAddress}</div>
+    <div class="my-3"><hr></div>
 
     <div class="flex text-lg mt-4 overflow-hidden">Orig. hash: {item.entry}</div>
     <div class="cursor-pointer mt-4 bg-zinc-100 hover:bg-zinc-200 rounded-md p-2 border-2" on:click={()=>{fileInput.click()}}>

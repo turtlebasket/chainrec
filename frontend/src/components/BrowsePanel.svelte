@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { asFullEntry, type Entry } from '$lib/types';
+import { verifyXClickDestination } from '$lib/uistore';
 	import { queryAllRecords, queryLastRecordsRange } from '../lib/wallet';
+	export let clickItemFunc=() => {};
+	export let selectedItem: Entry;
 </script>
 
 <!-- {#await queryLastRecordsRange(20)} -->
@@ -9,7 +13,11 @@
 	<div class="rounded-2xl bg-zinc-50 p-4 flex flex-col overflow-y-scroll no-scrollbar">
 		{#if items.length != 0 || !items}
 			{#each items.reverse() as item}
-				<div class="flex flex-row py-2 px-4 rounded-xl hover:bg-zinc-100">
+				<div class="flex flex-row py-2 px-4 rounded-xl hover:bg-zinc-100 cursor-pointer" on:click={() => {
+					selectedItem = asFullEntry(item)
+					$verifyXClickDestination = "browse"
+					clickItemFunc()
+				}}>
 					<div class="flex flex-col">
 						<div class="text-lg font-semibold">{item.entryInfo}</div>
 						<div class="mt-1">Hash: {item.entry}</div>

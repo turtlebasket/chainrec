@@ -1,13 +1,18 @@
 <script lang="ts">
-import type { EntryAnon } from "$lib/types";
-import { queryUserRecords } from "$lib/wallet";
+import type { Entry, EntryAnon } from "$lib/types";
+import { verifyXClickDestination } from "$lib/uistore";
+import { queryFullUserRecords, queryUserRecords } from "$lib/wallet";
 export let onCreateFunc=() => {};
 export let clickItemFunc=() => {};
-export let selectedItem: EntryAnon;
+export let selectedItem: Entry;
 </script>
 
-{#await queryUserRecords()} 
-	<div class="flex flex-col mt-6 text-lg items-center"><div>Loading...</div></div>
+<!-- {#await queryUserRecords()}  -->
+{#await queryFullUserRecords()} 
+	<div class="flex flex-col mt-6 text-lg items-center">
+		<div>Loading...</div><br>
+		<div>Note that a query permit must be signed to view personal data contained in records.</div>
+	</div>
 {:then items }
     <div class="rounded-2xl bg-zinc-50 p-4 flex flex-col overflow-y-scroll no-scrollbar">
 		{#if items.length > 0 || !items}
@@ -16,7 +21,11 @@ export let selectedItem: EntryAnon;
                 <div class="text-lg font-semibold">Create New</div>
             </div>
             {#each items.reverse() as item}
-				<div class="flex flex-row py-2 px-4 rounded-xl hover:bg-zinc-100 cursor-pointer" on:click={() => {selectedItem = item; clickItemFunc()}}>
+				<div class="flex flex-row py-2 px-4 rounded-xl hover:bg-zinc-100 cursor-pointer" on:click={() => {
+					selectedItem = item; 
+					$verifyXClickDestination = "my-records"
+					clickItemFunc()
+					}}>
 					<div class="flex flex-col">
 						<div class="text-lg font-semibold">{item.entryInfo}</div>
 						<div class="mt-1">Hash: {item.entry}</div>

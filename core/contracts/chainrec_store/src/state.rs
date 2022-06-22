@@ -140,14 +140,16 @@ pub fn get_user_copyright_entries<S: ReadonlyStorage>(
 }
 
 /// Get full copyright entry for a user
-pub fn get_copyright_entry_full<S: ReadonlyStorage>(
+pub fn get_user_copyright_entries_full<S: ReadonlyStorage>(
     storage: &S,
     user: CanonicalAddr,
-    id: u32,
-) -> StdResult<CopyrightEntry> {
+) -> StdResult<Vec<CopyrightEntry>> {
     let user_store: ReadonlyPrefixedStorage<S> =
         ReadonlyPrefixedStorage::multilevel(&[PREFIX_USER_ENTRIES, user.as_slice()], storage);
     let entry_store: AppendStore<_, ReadonlyPrefixedStorage<S>> =
         AppendStore::attach(&user_store).unwrap().unwrap();
-    entry_store.get_at(id as u32)
+    Ok(entry_store
+        .iter()
+        .map(|i| i.unwrap())
+        .collect::<Vec<CopyrightEntry>>())
 }

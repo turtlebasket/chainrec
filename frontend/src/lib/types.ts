@@ -12,3 +12,14 @@ export type EntryAnon = {
     entry: string,
     timestamp: number,
 }
+
+export function asFullEntry(anon: EntryAnon) {
+    const x: Entry = {
+        ownerAddress: anon.ownerAddress,
+        entryInfo: anon.entryInfo,
+        entry: anon.entry,
+        timestamp: anon.timestamp,
+        userInfo: null
+    }
+    return x
+}

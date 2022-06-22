@@ -7,7 +7,7 @@ use secret_toolkit::permit::{validate, Permit};
 use crate::msg::{HandleMsg, InitMsg, QueryMsg, QueryWithPermit};
 use crate::state::{
     get_all_copyright_entries, get_all_copyright_entries_backpaginate, get_config,
-    get_copyright_entry_full, get_range_copyright_entries, get_user_copyright_entries,
+    get_range_copyright_entries, get_user_copyright_entries, get_user_copyright_entries_full,
     new_copyright_entry, set_config, Config,
 };
 use crate::types::CopyrightEntry;
@@ -88,7 +88,9 @@ pub fn query<S: Storage, A: Api, Q: Querier>(
             &deps.storage,
             CanonicalAddr::from(address.as_bytes()),
         )?),
-        QueryMsg::WithPermit { permit, query } => to_binary(&permit_query(deps, permit, query)),
+
+        // DO NOT convert to binary, as that's what permit_query returns
+        QueryMsg::WithPermit { permit, query } => permit_query(deps, permit, query), 
     }
 }
 
@@ -102,10 +104,9 @@ pub fn permit_query<S: Storage, A: Api, Q: Querier>(
     let v_user = validate(deps, PREFIX_REVOKED_PERMITS, &permit, address, None)?;
 
     match query {
-        QueryWithPermit::GetFullRecord { id } => to_binary(&get_copyright_entry_full(
+        QueryWithPermit::GetFullUserRecords { } => to_binary(&get_user_copyright_entries_full(
             &deps.storage,
-            CanonicalAddr::from(v_user.as_bytes()),
-            id,
+            CanonicalAddr::from(v_user.as_bytes())
         )),
     }
 }
