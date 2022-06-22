@@ -58,7 +58,8 @@ describe("chainrec_store", () => {
         await expect(res2).to.have.length(1); // account_1 has one record
     })
 
-    it ("Can access own but not others' copyright records", async () => {
-        const res = await contract.query.get_full_record({ account: contract_owner, id: 1 })
-    })
+
+    // it ("Can access own but not others' copyright records", async () => {
+    //     const res = await contract.query.with_permit(permit, { get_full_record: { id: 0 } })
+    // })
 })
