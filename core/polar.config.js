@@ -12,8 +12,7 @@ const accounts = [
     mnemonic: 'sorry object nation also century glove small tired parrot avocado pulp purchase'
   }
 ];
-
-const accounts_mainnet = [{
+const accounts_prod = [{
   name: 'account_0',
   address: process.env['MAINNET_ADDRESS'],
   mnemonic: process.env['MAINNET_MNEMONIC'],
@@ -27,22 +26,22 @@ const networks = {
   },
   // Pulsar-2
   testnet: {
-    endpoint: 'http://testnet.securesecrets.org:1317/',
+    endpoint: 'https://pulsar-2.api.trivium.network:1317/',
     chainId: 'pulsar-2',
-    accounts: accounts,
+    accounts: accounts_prod,
   },
-  // mainnet: {
-  //   endpoint: ''
-  //   chainId: 'secret-4',
-  //   accounts: accounts,
-  // }
+  mainnet: {
+    endpoint: 'https://secret-4.api.trivium.network:1317/',
+    chainId: 'secret-4',
+    accounts: accounts_prod,
+  }
 };
 
 module.exports = {
   networks: {
     default: networks.devnet,
     testnet: networks.testnet,
-    // mainnet: networks.mainnet
+    mainnet: networks.mainnet
   },
   mocha: {
     timeout: 60000
