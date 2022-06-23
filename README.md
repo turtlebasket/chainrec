@@ -14,4 +14,4 @@ Private, tamper-proof document records on the blockchain.
 - [x] Anonymous aggregate record reading
 - [x] Verified user record reading (query permit)
 - [ ] Anonymous Analytics (# of records, # of users)
-- [ ] Hash/unhash on frontend (xxhash)
+- [x] Hash/compare on frontend (~~xxhash~~ SHA256)
