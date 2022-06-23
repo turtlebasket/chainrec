@@ -6,11 +6,11 @@ use secret_toolkit::permit::{validate, Permit};
 
 use crate::msg::{HandleMsg, InitMsg, QueryMsg, QueryWithPermit};
 use crate::state::{
-    get_all_copyright_entries, get_all_copyright_entries_backpaginate, get_config,
-    get_range_copyright_entries, get_user_copyright_entries, get_user_copyright_entries_full,
-    new_copyright_entry, set_config, Config,
+    get_all_entries, get_all_entries_backpaginate, get_config,
+    get_range_entries, get_user_entries, get_user_entries_full,
+    new_entry, set_config, Config,
 };
-use crate::types::CopyrightEntry;
+use crate::types::Entry;
 
 pub const PREFIX_REVOKED_PERMITS: &str = "rp";
 
@@ -46,7 +46,7 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
                 return Err(StdError::generic_err("Content hash must be 64 characters long"));
             }
 
-            let new_entry = CopyrightEntry {
+            let entry = Entry {
                 user_info,
                 entry_info,
                 entry,
@@ -55,10 +55,10 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
                 timestamp: env.block.time as u32,
             };
 
-            new_copyright_entry(
+            new_entry(
                 &mut deps.storage,
                 CanonicalAddr::from(env.message.sender.as_str().as_bytes()),
-                new_entry,
+                entry,
             );
 
             Ok(HandleResponse {
@@ -75,16 +75,16 @@ pub fn query<S: Storage, A: Api, Q: Querier>(
     msg: QueryMsg,
 ) -> StdResult<Binary> {
     match msg {
-        QueryMsg::GetRecordsAll {} => to_binary(&get_all_copyright_entries(&deps.storage)),
+        QueryMsg::GetRecordsAll {} => to_binary(&get_all_entries(&deps.storage)),
         QueryMsg::GetRecordsAllPaginateBack { limit } => to_binary(
-            &get_all_copyright_entries_backpaginate(&deps.storage, limit as usize),
+            &get_all_entries_backpaginate(&deps.storage, limit as usize),
         ),
-        QueryMsg::GetRecordsRange { start, stop } => to_binary(&get_range_copyright_entries(
+        QueryMsg::GetRecordsRange { start, stop } => to_binary(&get_range_entries(
             &deps.storage,
             start as usize,
             stop as usize,
         )),
-        QueryMsg::GetRecordsUser { address } => to_binary(&get_user_copyright_entries(
+        QueryMsg::GetRecordsUser { address } => to_binary(&get_user_entries(
             &deps.storage,
             CanonicalAddr::from(address.as_bytes()),
         )?),
@@ -104,7 +104,7 @@ pub fn permit_query<S: Storage, A: Api, Q: Querier>(
     let v_user = validate(deps, PREFIX_REVOKED_PERMITS, &permit, address, None)?;
 
     match query {
-        QueryWithPermit::GetFullUserRecords { } => to_binary(&get_user_copyright_entries_full(
+        QueryWithPermit::GetFullUserRecords { } => to_binary(&get_user_entries_full(
             &deps.storage,
             CanonicalAddr::from(v_user.as_bytes())
         )),

@@ -206,7 +206,7 @@ export async function queryFullUserRecords(): Promise<Entry[]> {
 
 // ------ HANDLERS ------
 
-export async function createCopyrightRecord(entry: string, entryInfo: string, userInfo: string) {
+export async function createRecord(entry: string, entryInfo: string, userInfo: string) {
     const createRecordMsg = new MsgExecuteContract({
         sender: get(walletAddress),
         contractAddress: contractAddress,

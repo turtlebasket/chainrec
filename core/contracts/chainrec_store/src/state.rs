@@ -11,7 +11,7 @@ use secret_toolkit::{
     storage::{AppendStore, AppendStoreMut},
 };
 
-use crate::types::{CopyrightEntryPublic, CopyrightEntry};
+use crate::types::{EntryPublic, Entry};
 
 pub const KEY_CONFIG: &[u8] = b"c";
 pub const PREFIX_USER_ENTRIES: &[u8] = b"ue";
@@ -50,18 +50,18 @@ pub fn set_config<S: Storage>(store: &mut S, config: &Config) {
 // Index all events for each user under 1 key. Each key is made
 // up of the event prefix ("e") plus the user's address.
 
-/// Write a new copyright entry for a user
-pub fn new_copyright_entry<S: Storage>(
+/// Write a new entry for a user
+pub fn new_entry<S: Storage>(
     storage: &mut S,
     user: CanonicalAddr,
-    entry: CopyrightEntry,
+    entry: Entry,
 ) {
     let u_pref = &[PREFIX_USER_ENTRIES, user.as_slice()];
 
     // push to user store
     let mut user_store: PrefixedStorage<S> =
         PrefixedStorage::multilevel(u_pref, storage);
-    let mut user_entry_store: AppendStoreMut<CopyrightEntry, PrefixedStorage<S>> =
+    let mut user_entry_store: AppendStoreMut<Entry, PrefixedStorage<S>> =
         AppendStoreMut::attach_or_create(&mut user_store).unwrap();
     user_entry_store.push(&entry).unwrap();
 
@@ -70,15 +70,15 @@ pub fn new_copyright_entry<S: Storage>(
         &[PREFIX_ANON_ENTRIES],
         storage,
     );
-    let mut anon_entry_store: AppendStoreMut<CopyrightEntryPublic, PrefixedStorage<S>> =
+    let mut anon_entry_store: AppendStoreMut<EntryPublic, PrefixedStorage<S>> =
         AppendStoreMut::attach_or_create(&mut anon_store).unwrap();
-    anon_entry_store.push(&CopyrightEntryPublic::from(entry)).unwrap();
+    anon_entry_store.push(&EntryPublic::from(entry)).unwrap();
 }
 
-/// Get the list of public copyright entries from all users
-pub fn get_all_copyright_entries<S: ReadonlyStorage>(
+/// Get the list of public entries from all users
+pub fn get_all_entries<S: ReadonlyStorage>(
     storage: &S,
-) -> StdResult<Vec<CopyrightEntryPublic>> {
+) -> StdResult<Vec<EntryPublic>> {
     let anon_store: ReadonlyPrefixedStorage<S> =
         ReadonlyPrefixedStorage::multilevel(&[PREFIX_ANON_ENTRIES], storage);
     let entry_store: AppendStore<_, ReadonlyPrefixedStorage<S>> =
@@ -86,13 +86,13 @@ pub fn get_all_copyright_entries<S: ReadonlyStorage>(
     Ok(entry_store
         .iter()
         .map(|entry| entry.unwrap())
-        .collect::<Vec<CopyrightEntryPublic>>())
+        .collect::<Vec<EntryPublic>>())
 }
 
-pub fn get_all_copyright_entries_backpaginate<S: ReadonlyStorage>(
+pub fn get_all_entries_backpaginate<S: ReadonlyStorage>(
     storage: &S,
     range: usize
-) -> StdResult<Vec<CopyrightEntryPublic>> {
+) -> StdResult<Vec<EntryPublic>> {
 
     let anon_store: ReadonlyPrefixedStorage<S> =
         ReadonlyPrefixedStorage::multilevel(&[PREFIX_ANON_ENTRIES], storage);
@@ -103,15 +103,15 @@ pub fn get_all_copyright_entries_backpaginate<S: ReadonlyStorage>(
         .skip(entry_store.len() as usize - range)
         .take(range)
         .map(|entry| entry.unwrap())
-        .collect::<Vec<CopyrightEntryPublic>>())
+        .collect::<Vec<EntryPublic>>())
 }
 
-/// Get the list of all copyright entries for all users & convert to anonymous format
-pub fn get_range_copyright_entries<S: ReadonlyStorage>(
+/// Get the list of all entries for all users & convert to anonymous format
+pub fn get_range_entries<S: ReadonlyStorage>(
     storage: &S,
     start: usize,
     stop: usize,
-) -> StdResult<Vec<CopyrightEntryPublic>> {
+) -> StdResult<Vec<EntryPublic>> {
     let anon_store: ReadonlyPrefixedStorage<S> =
         ReadonlyPrefixedStorage::multilevel(&[PREFIX_ANON_ENTRIES], storage);
     let entry_store: AppendStore<_, ReadonlyPrefixedStorage<S>> =
@@ -121,29 +121,29 @@ pub fn get_range_copyright_entries<S: ReadonlyStorage>(
         .skip(start)
         .take(stop - start)
         .map(|entry| entry.unwrap())
-        .collect::<Vec<CopyrightEntryPublic>>())
+        .collect::<Vec<EntryPublic>>())
 }
 
-/// Get the list of all copyright entries for a user & convert to anonymous format
-pub fn get_user_copyright_entries<S: ReadonlyStorage>(
+/// Get the list of all entries for a user & convert to anonymous format
+pub fn get_user_entries<S: ReadonlyStorage>(
     storage: &S,
     user: CanonicalAddr,
-) -> StdResult<Vec<CopyrightEntryPublic>> {
+) -> StdResult<Vec<EntryPublic>> {
     let user_store: ReadonlyPrefixedStorage<S> =
         ReadonlyPrefixedStorage::multilevel(&[PREFIX_USER_ENTRIES, user.as_slice()], storage);
     let entry_store: AppendStore<_, ReadonlyPrefixedStorage<S>> =
         AppendStore::attach(&user_store).unwrap().unwrap();
     Ok(entry_store
         .iter()
-        .map(|entry| CopyrightEntryPublic::from(entry.unwrap()))
-        .collect::<Vec<CopyrightEntryPublic>>())
+        .map(|entry| EntryPublic::from(entry.unwrap()))
+        .collect::<Vec<EntryPublic>>())
 }
 
-/// Get full copyright entry for a user
-pub fn get_user_copyright_entries_full<S: ReadonlyStorage>(
+/// Get full entry for a user
+pub fn get_user_entries_full<S: ReadonlyStorage>(
     storage: &S,
     user: CanonicalAddr,
-) -> StdResult<Vec<CopyrightEntry>> {
+) -> StdResult<Vec<Entry>> {
     let user_store: ReadonlyPrefixedStorage<S> =
         ReadonlyPrefixedStorage::multilevel(&[PREFIX_USER_ENTRIES, user.as_slice()], storage);
     let entry_store: AppendStore<_, ReadonlyPrefixedStorage<S>> =
@@ -151,5 +151,5 @@ pub fn get_user_copyright_entries_full<S: ReadonlyStorage>(
     Ok(entry_store
         .iter()
         .map(|i| i.unwrap())
-        .collect::<Vec<CopyrightEntry>>())
+        .collect::<Vec<Entry>>())
 }

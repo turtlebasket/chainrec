@@ -3,7 +3,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct CopyrightEntry {
+pub struct Entry {
     pub entry: String, 
     pub owner: HumanAddr,
     pub user_info: String,
@@ -12,16 +12,16 @@ pub struct CopyrightEntry {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct CopyrightEntryPublic {
+pub struct EntryPublic {
     pub entry: String,
     pub owner: HumanAddr,
     pub entry_info: String,
     pub timestamp: u32,
 }
 
-impl CopyrightEntryPublic {
-    pub fn from(entry: CopyrightEntry) -> Self {
-        CopyrightEntryPublic {
+impl EntryPublic {
+    pub fn from(entry: Entry) -> Self {
+        EntryPublic {
             entry: entry.entry,
             owner: entry.owner,
             entry_info: entry.entry_info,

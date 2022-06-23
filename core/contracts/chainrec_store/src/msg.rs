@@ -3,7 +3,7 @@ use schemars::JsonSchema;
 use secret_toolkit::permit::Permit;
 use serde::{Deserialize, Serialize};
 
-use crate::types::{CopyrightEntry, CopyrightEntryPublic};
+use crate::types::{Entry, EntryPublic};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InitMsg {}
@@ -54,6 +54,6 @@ pub enum QueryWithPermit {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryAnswer {
-    RecordsAnonymous { records: Vec<CopyrightEntryPublic> },
-    RecordFull { record: CopyrightEntry },
+    RecordsAnonymous { records: Vec<EntryPublic> },
+    RecordFull { record: Entry },
 }
