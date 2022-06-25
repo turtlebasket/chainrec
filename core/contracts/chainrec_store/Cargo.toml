@@ -36,4 +36,3 @@ schemars = "0.7"
 serde = { version = "1.0.103", default-features = false, features = ["derive"] }
 snafu = { version = "0.6.3" }
 secret-toolkit = { version = "0.3", features = ["permit"] }
-secret-toolkit-incubator = { version = "0.3", features = ["cashmap"] }

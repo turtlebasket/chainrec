@@ -8,7 +8,7 @@ use crate::msg::{HandleMsg, InitMsg, QueryMsg, QueryWithPermit};
 use crate::state::{
     get_all_entries, get_all_entries_backpaginate, get_config,
     get_range_entries, get_user_entries, get_user_entries_full,
-    new_entry, set_config, Config,
+    new_entry, set_config, Config, increment_records, State, set_state, get_num_records,
 };
 use crate::types::Entry;
 
@@ -19,12 +19,17 @@ pub fn init<S: Storage, A: Api, Q: Querier>(
     env: Env,
     _msg: InitMsg,
 ) -> StdResult<InitResponse> {
-    let state = Config {
+    let config = Config {
         creator: deps.api.canonical_address(&env.message.sender)?,
         contract_address: env.contract.address,
     };
 
-    set_config(&mut deps.storage, &state);
+    let state = State {
+        records: 0,
+    };
+
+    set_config(&mut deps.storage, &config);
+    set_state(&mut deps.storage, &state);
 
     debug_print!("Contract was initialized by {}", env.message.sender);
 
@@ -61,6 +66,8 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
                 entry,
             );
 
+            increment_records(&mut deps.storage);
+
             Ok(HandleResponse {
                 messages: vec![], // no Cosmos SDK messages (i.e. transfers)
                 log: vec![],
@@ -88,7 +95,7 @@ pub fn query<S: Storage, A: Api, Q: Querier>(
             &deps.storage,
             CanonicalAddr::from(address.as_bytes()),
         )?),
-
+        QueryMsg::GetTotalRecords {  } => to_binary(&get_num_records(&deps.storage)),
         // DO NOT convert to binary, as that's what permit_query returns
         QueryMsg::WithPermit { permit, query } => permit_query(deps, permit, query), 
     }

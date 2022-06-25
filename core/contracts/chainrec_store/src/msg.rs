@@ -39,6 +39,7 @@ pub enum QueryMsg {
     GetRecordsUser {
         address: String,
     },
+    GetTotalRecords {},
     WithPermit {
         permit: Permit,
         query: QueryWithPermit,

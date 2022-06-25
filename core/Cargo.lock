@@ -96,7 +96,6 @@ dependencies = [
  "secret-cosmwasm-std",
  "secret-cosmwasm-storage",
  "secret-toolkit",
- "secret-toolkit-incubator",
  "serde",
  "snafu",
 ]
@@ -314,18 +313,6 @@ checksum = "020d3ef7f595e37fed1684d3f97b546a412138da88ea26f2e50e5309f2a0c2be"
 dependencies = [
  "secret-cosmwasm-std",
  "sha2",
-]
-
-[[package]]
-name = "secret-toolkit-incubator"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "371d61683921b104c3dc06489e9302832ebc99820bd344696dc272a5c8b8208d"
-dependencies = [
- "secret-cosmwasm-std",
- "secret-cosmwasm-storage",
- "secret-toolkit-serialization",
- "serde",
 ]
 
 [[package]]

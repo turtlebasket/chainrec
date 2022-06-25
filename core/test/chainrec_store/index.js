@@ -42,7 +42,7 @@ describe("chainrec_store", () => {
 
     it("Can read all records", async () => {
         const res = await contract.query.get_records_all()
-        // console.log(`ALL RES: ${JSON.stringify(res)}`)
+        console.log(`ALL RES: ${JSON.stringify(res)}`)
         await expect(res["Ok"]).to.have.length(3);
     })
 
@@ -58,8 +58,8 @@ describe("chainrec_store", () => {
         await expect(res2).to.have.length(1); // account_1 has one record
     })
 
-
-    // it ("Can access own but not others' records", async () => {
-    //     const res = await contract.query.with_permit(permit, { get_full_record: { id: 0 } })
-    // })
+    it("Can read analytics", async () => {
+        const res = await contract.query.get_total_records();
+        await expect(res).to.equal(3);
+    })
 })

@@ -25,11 +25,11 @@ SHELL = /bin/bash
 compile:
 	npx polar compile
 
-test:
-	npx polar test
-
 polar:
-	npx polar compile && npx polar test
+	npx polar clean && npx polar compile && npx polar test
+
+polar-test:
+	npx polar test
 
 deploy: 
 	npx polar run scripts/deploy.js

@@ -13,7 +13,8 @@ use secret_toolkit::{
 
 use crate::types::{EntryPublic, Entry};
 
-pub const KEY_CONFIG: &[u8] = b"c";
+pub const PREFIX_CONFIG: &[u8] = b"c";
+pub const PREFIX_STATE: &[u8] = b"s";
 pub const PREFIX_USER_ENTRIES: &[u8] = b"ue";
 pub const PREFIX_ANON_ENTRIES: &[u8] = b"ae";
 
@@ -38,11 +39,35 @@ fn load<T: DeserializeOwned, S: ReadonlyStorage>(storage: &S, key: &[u8]) -> Std
 }
 
 pub fn get_config<S: ReadonlyStorage>(store: &S) -> Config {
-    return load(store, KEY_CONFIG).unwrap();
+    return load(store, PREFIX_CONFIG).unwrap();
 }
 
 pub fn set_config<S: Storage>(store: &mut S, config: &Config) {
-    return save(store, KEY_CONFIG, config);
+    return save(store, PREFIX_CONFIG, config);
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct State {
+    pub records: u32,
+}
+
+pub fn get_state<S: ReadonlyStorage>(store: &S) -> State {
+    return load(store, PREFIX_STATE).unwrap();
+}
+
+pub fn set_state<S: Storage>(store: &mut S, state: &State) {
+    return save(store, PREFIX_STATE, state);
+}
+
+/// Increments number of records. Should be called in the handler for creating records.
+pub fn increment_records<S: Storage>(store: &mut S) {
+    let mut old = get_state(store);
+    old.records += 1;
+    set_state(store, &old);
+}
+
+pub fn get_num_records<S: Storage>(store: &S) -> u32 {
+    return get_state(store).records;
 }
 
 // Storage format for events
